@@ -1,29 +1,85 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:doctype_name",
  "creation": "2023-01-25 16:53:47.324850",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "doctype_name"
- ],
- "fields": [
-  {
-   "fieldname": "doctype_name",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "DocType Name",
-   "options": "DocType"
-  }
- ],
+    "doctype_name",
+    "enable",
+    "section_break_3",
+    "condition",
+    "column_break_6",
+    "html_7",
+    "section_break_7",
+    "get_date_fields",
+    "date_fields"
+   ],
+   "fields": [
+    {
+     "fieldname": "doctype_name",
+     "fieldtype": "Link",
+     "in_list_view": 1,
+     "label": "DocType Name",
+     "options": "DocType",
+     "unique": 1
+    },
+    {
+     "default": "1",
+     "fieldname": "enable",
+     "fieldtype": "Check",
+     "in_list_view": 1,
+     "label": "Enable"
+    },
+    {
+     "fieldname": "get_date_fields",
+     "fieldtype": "Button",
+     "label": "Get Date Fields"
+    },
+    {
+     "fieldname": "section_break_3",
+     "fieldtype": "Section Break",
+     "label": "Conditions"
+    },
+    {
+     "fieldname": "section_break_7",
+     "fieldtype": "Section Break",
+     "label": "Fields"
+    },
+    {
+     "fieldname": "date_fields",
+     "fieldtype": "Table",
+     "label": "Date Fields",
+     "options": "Date Fields"
+    },
+    {
+     "fieldname": "condition",
+     "fieldtype": "Code",
+     "ignore_xss_filter": 1,
+     "in_list_view": 1,
+     "label": "Condition"
+    },
+    {
+     "fieldname": "column_break_6",
+     "fieldtype": "Column Break"
+    },
+    {
+     "fieldname": "html_7",
+     "fieldtype": "HTML",
+     "label": "Condition Examples",
+     "options": "<p><strong>Condition Examples:</strong></p>\n<pre>doc.status==\"Open\"<br>doc.due_date==nowdate()<br>doc.total &gt; 40000\n</pre>\n"
+    }
+   ],
  "index_web_pages_for_search": 1,
  "links": [],
  "modified": "2023-01-25 16:53:47.324850",
  "modified_by": "Administrator",
- "module": "Telebot Integration",
+ "module": "TeleBot Integration",
  "name": "Date Notification",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

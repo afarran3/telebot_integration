@@ -1,0 +1,135 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "ENL-.YY.-.MM.-.DD.-.#####",
+ "creation": "2023-01-25 17:43:10.422467",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+    "subject",
+    "for_user",
+    "party_type",
+    "to_party",
+    "doctype_name",
+    "doc_name",
+    "column_break_5",
+    "status",
+    "type",
+    "message",
+    "from_user"
+ ],
+ "fields": [
+    {
+     "fieldname": "doctype_name",
+     "fieldtype": "Link",
+     "in_list_view": 1,
+     "in_standard_filter": 1,
+     "label": "DocType Name",
+     "options": "DocType",
+     "read_only": 1,
+     "reqd": 1
+    },
+    {
+     "fieldname": "doc_name",
+     "fieldtype": "Dynamic Link",
+     "in_list_view": 1,
+     "label": "Doc Name",
+     "options": "doctype_name",
+     "read_only": 1,
+     "reqd": 1
+    },
+    {
+     "default": "Open",
+     "fieldname": "status",
+     "fieldtype": "Select",
+     "in_list_view": 1,
+     "in_standard_filter": 1,
+     "label": "Status",
+     "options": "Open\nClosed"
+    },
+    {
+     "fieldname": "message",
+     "fieldtype": "Small Text",
+     "label": "Message",
+     "read_only": 1
+    },
+    {
+     "fieldname": "subject",
+     "fieldtype": "Data",
+     "in_list_view": 1,
+     "label": "Subject",
+     "read_only": 1
+    },
+    {
+     "fieldname": "for_user",
+     "fieldtype": "Link",
+     "label": "To User",
+     "options": "User",
+     "read_only": 1
+    },
+    {
+     "fieldname": "from_user",
+     "fieldtype": "Link",
+     "label": "User",
+     "options": "User",
+     "read_only": 1
+    },
+    {
+     "fieldname": "column_break_5",
+     "fieldtype": "Column Break"
+    },
+    {
+     "fieldname": "type",
+     "fieldtype": "Select",
+     "in_list_view": 1,
+     "in_standard_filter": 1,
+     "label": "Alert Type",
+     "options": "\nDate\nTelegram\nSMS\nOther",
+     "read_only": 1
+    },
+    {
+     "fieldname": "party_type",
+     "fieldtype": "Link",
+     "label": "To Party Type",
+     "options": "DocType",
+     "read_only": 1
+    },
+    {
+     "fieldname": "to_party",
+     "fieldtype": "Dynamic Link",
+     "label": "To Party",
+     "options": "party_type",
+     "read_only": 1
+    }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-01-25 17:43:10.422467",
+ "modified_by": "Administrator",
+ "module": "TeleBot Integration",
+ "name": "TeleBot Notification Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}

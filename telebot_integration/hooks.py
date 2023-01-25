@@ -1,7 +1,7 @@
 from . import __version__ as app_version
 
 app_name = "telebot_integration"
-app_title = "Telebot Integration"
+app_title = "TeleBot Integration"
 app_publisher = "Ahmed Al-farran"
 app_description = "Telegram Bot Integration For FRAPPE & ERPNext"
 app_email = "afarran1992@gmail.com"
