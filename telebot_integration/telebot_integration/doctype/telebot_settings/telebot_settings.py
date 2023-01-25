@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 import telegram
+import telebot
 from frappe.model.document import Document
 from frappe.utils import get_url_to_form
 from frappe.utils.data import quoted
@@ -80,30 +81,30 @@ def create_telegram_chat(bot_name = None):
 
 		for k, v in updates.items():
 			for chat in v['chats']:
-				existing_tele_chat = frappe.db.get_value("TeleBot User Settings", {'telegram_chat_id':chat['id'],'telegram_settings':k})
+				existing_tele_chat = frappe.db.get_value("TeleBot User Settings", {'telegram_chat_id':chat.id,'telegram_settings':k})
 				if not existing_tele_chat:
 					tele_chat = frappe.get_doc
 					(
 						{
 							'doctype': 'TeleBot User Settings',
-							'telegram_chat_id': chat['id'],
+							'telegram_chat_id': chat.id,
 							'telegram_settings': k,
 							'bot_name': v['bot_name']
 						}
 					)
 					assign_values_based_on_type(tele_chat, chat)
 				else:
-					doc = frappe.get_doc('TeleBot User Settings',{'telegram_chat_id':chat['id'],'telegram_settings':k})
+					doc = frappe.get_doc('TeleBot User Settings',{'telegram_chat_id':chat.id,'telegram_settings':k})
 					assign_values_based_on_type(doc, chat)
 
 
 def assign_values_based_on_type(tele_chat, chat):
-	if chat['type'] == 'private':
-		tele_chat.telegram_user_name = str(chat['first_name'] + " " + chat['last_name'])
-	elif chat['type'] == 'supergroup' or 'channel':
-		tele_chat.telegram_user_name = str(chat['title'])
-	elif chat['type'] == 'group':
-		tele_chat.telegram_user_name = str(chat['title'])
+	if chat.type == 'private':
+		tele_chat.telegram_user_name = str(chat.first_name + " " + chat.last_name)
+	elif chat.type == 'supergroup' or 'channel':
+		tele_chat.telegram_user_name = str(chat.title)
+	elif chat.type == 'group':
+		tele_chat.telegram_user_name = str(chat.title)
 	tele_chat.save()
 
 
@@ -112,16 +113,17 @@ def get_updates(bot_doc_list):
 	for bot_doc in bot_doc_list:
 		# try:
 		chats = []
-		bot = telegram.Bot(token=bot_doc.telegram_token)
-		updates = asyncio.run(bot.get_updates(limit=100, read_timeout=120, connect_timeout=120 ,pool_timeout=120, offset=bot_doc.last_update_id))
+		bot = telebot.TeleBot(bot_doc.telegram_token)
+		updates = bot.get_updates(limit=100, offset=bot_doc.last_update_id)
+		# print("=-=updates=-=", updates)
 		for update in updates:
-			if update['message']:
-				chats.append(update['message']['chat'])
-
-			if update['channel_post']:
-				chats.append(update['channel_post']['chat'])
-			
-			bot_doc.last_update_id = update['update_id']
+			# print("=-=update=-=", updates)
+			if update.message:
+				chats.append(update.message.chat)
+			if update.channel_post:
+				chats.append(update.channel_post.chat)
+				
+			bot_doc.last_update_id = update.update_id
 		bot_doc.save()
 		if chats:
 			update_list[bot_doc.name] = { "bot_name" : bot_doc.bot_name, "chats": chats}
