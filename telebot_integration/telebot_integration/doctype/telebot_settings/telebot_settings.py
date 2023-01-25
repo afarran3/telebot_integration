@@ -37,7 +37,7 @@ def send_to_telegram(telegram_user, message, reference_doctype=None, reference_n
 				if attachment:
 					attachment = 1
 			if attachment == 1:
-				attachment_url =get_url_for_telegram(reference_doctype, reference_name)
+				attachment_url = get_url_for_telegram(reference_doctype, reference_name)
 				message = message + space +  attachment_url
 			asyncio.run(bot.send_message(chat_id=telegram_chat_id, text=message))
 		
@@ -113,7 +113,7 @@ def get_updates(bot_doc_list):
 		try:
 			chats = []
 			bot = telegram.Bot(token = bot_doc.telegram_token)
-			updates = asyncio.run(bot.get_updates(limit=100, offset=bot_doc.last_update_id))
+			updates = asyncio.run(bot.get_updates(limit=100, timeout=120, offset=bot_doc.last_update_id))
 			for update in updates:
 				if update['message']:
 					chats.append(update['message']['chat'])
@@ -128,7 +128,7 @@ def get_updates(bot_doc_list):
 
 		except Exception as e:
 			frappe.log_error(frappe.get_traceback(), f'{bot_doc.name} get updates error')
-			# frappe.throw(_('An error occured. Check error log for more info'))
+			frappe.throw(_('An error occured. Check error log for more info'))
 			continue
 
 	return update_list
