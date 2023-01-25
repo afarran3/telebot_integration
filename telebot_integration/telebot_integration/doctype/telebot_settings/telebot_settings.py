@@ -128,7 +128,7 @@ def get_updates(bot_doc_list):
 
 		except Exception as e:
 			frappe.log_error(frappe.get_traceback(), f'{bot_doc.name} get updates error')
-			frappe.throw(_('An error occured. Check error log for more info'))
+			# frappe.throw(_('An error occured. Check error log for more info'))
 			continue
 
 	return update_list
