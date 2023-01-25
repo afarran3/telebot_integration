@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include telebot_integration *.css
+recursive-include telebot_integration *.csv
+recursive-include telebot_integration *.html
+recursive-include telebot_integration *.ico
+recursive-include telebot_integration *.js
+recursive-include telebot_integration *.json
+recursive-include telebot_integration *.md
+recursive-include telebot_integration *.png
+recursive-include telebot_integration *.py
+recursive-include telebot_integration *.svg
+recursive-include telebot_integration *.txt
+recursive-exclude telebot_integration *.pyc
