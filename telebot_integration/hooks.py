@@ -183,8 +183,7 @@ doc_events = {
 scheduler_events = {
     "cron": {
 		"0/15 * * * *": [
-		"intelebot.intelebot.doctype.telegram_bot.telegram_bot.create_telegram_chat",
-		"intelebot.intelebot.doctype.send_document.send_document.process_unsent_document"
+		"telebot_integration.telebot_integration.doctype.telebot_settings.telebot_settings.create_telegram_chat"
 		]
 	},
 	"daily": [
