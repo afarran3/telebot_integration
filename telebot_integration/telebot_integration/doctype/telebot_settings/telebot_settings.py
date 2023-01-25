@@ -112,8 +112,8 @@ def get_updates(bot_doc_list):
 	for bot_doc in bot_doc_list:
 		# try:
 		chats = []
-		bot = telegram.Bot(token = bot_doc.telegram_token)
-		updates = asyncio.run(bot.get_updates(limit=100, timeout=1200, offset=bot_doc.last_update_id))
+		bot = telegram.Bot(token=bot_doc.telegram_token)
+		updates = asyncio.run(bot.get_updates(limit=100, read_timeout=120, offset=bot_doc.last_update_id))
 		for update in updates:
 			if update['message']:
 				chats.append(update['message']['chat'])
