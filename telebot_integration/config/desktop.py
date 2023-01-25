@@ -3,8 +3,8 @@ from frappe import _
 def get_data():
 	return [
 		{
-			"module_name": "Telebot Integration",
+			"module_name": "TeleBot Integration",
 			"type": "module",
-			"label": _("Telebot Integration")
+			"label": _("TeleBot Integration")
 		}
 	]

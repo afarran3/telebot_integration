@@ -1,1 +1,1 @@
-Telebot Integration
+TeleBot Integration
