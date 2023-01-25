@@ -61,7 +61,7 @@
     {
      "fieldname": "telegram_settings",
      "fieldtype": "Link",
-     "label": "Telegram Settings",
+     "label": "TeleBot Settings",
      "options": "TeleBot Settings"
     },
     {

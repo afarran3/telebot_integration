@@ -5,7 +5,7 @@ frappe.ui.form.on('Date Notification', {
 	
 	get_date_fields: function(frm) {
 		frappe.call({
-			method: 'telegram_integration.telegram_integration.doctype.date_notification.date_notification.get_date_fields',
+			method: 'telebot_integration.telebot_integration.doctype.date_notification.date_notification.get_date_fields',
 			args: {"doctype_name":cur_frm.doc.doctype_name},
 			callback: (r) => {
 
@@ -32,8 +32,8 @@ frappe.ui.form.on('Date Notification', {
 		if(frm.doc.enable) {
 			frm.add_custom_button(__('Get Alerts for Today'), function() {
 				frappe.call({
-					method: 'telegram_integration.telegram_integration.doctype.date_notification.date_notification.get_documents_for_today',
-					// method: 'telegram_integration.telegram_integration.doctype.date_notification.date_notification.trigger_daily_alerts',
+					method: 'telebot_integration.telebot_integration.doctype.date_notification.date_notification.get_documents_for_today',
+					// method: 'telebot_integration.telebot_integration.doctype.date_notification.date_notification.trigger_daily_alerts',
 					args: {
 						notification: frm.doc.name
 					},
