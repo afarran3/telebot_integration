@@ -110,25 +110,25 @@ def assign_values_based_on_type(tele_chat, chat):
 def get_updates(bot_doc_list):
 	update_list = {}
 	for bot_doc in bot_doc_list:
-		try:
-			chats = []
-			bot = telegram.Bot(token = bot_doc.telegram_token)
-			updates = asyncio.run(bot.get_updates(limit=100, timeout=120, offset=bot_doc.last_update_id))
-			for update in updates:
-				if update['message']:
-					chats.append(update['message']['chat'])
+		# try:
+		chats = []
+		bot = telegram.Bot(token = bot_doc.telegram_token)
+		updates = asyncio.run(bot.get_updates(limit=100, timeout=120, offset=bot_doc.last_update_id))
+		for update in updates:
+			if update['message']:
+				chats.append(update['message']['chat'])
 
-				if update['channel_post']:
-					chats.append(update['channel_post']['chat'])
-				
-				bot_doc.last_update_id = update['update_id']
-			bot_doc.save()
-			if chats:
-				update_list[bot_doc.name] = { "bot_name" : bot_doc.bot_name, "chats": chats}
+			if update['channel_post']:
+				chats.append(update['channel_post']['chat'])
+			
+			bot_doc.last_update_id = update['update_id']
+		bot_doc.save()
+		if chats:
+			update_list[bot_doc.name] = { "bot_name" : bot_doc.bot_name, "chats": chats}
 
-		except Exception as e:
-			frappe.log_error(frappe.get_traceback(), f'{bot_doc.name} get updates error')
-			frappe.throw(_('An error occured. Check error log for more info'))
-			continue
+		# except Exception as e:
+		# 	frappe.log_error(frappe.get_traceback(), f'{bot_doc.name} get updates error')
+		# 	frappe.throw(_('An error occured. Check error log for more info'))
+		# 	continue
 
 	return update_list
