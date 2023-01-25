@@ -316,52 +316,52 @@ class TeleBotNotification(Document):
 
 @frappe.whitelist()
 def run_telegram_notifications(doc, method):
-    """Run notifications for this method"""
-    if frappe.flags.in_import or frappe.flags.in_patch or frappe.flags.in_install:
-        return
+	"""Run notifications for this method"""
 
-    if doc.flags.tel_notifications_executed == None:
-        doc.flags.tel_notifications_executed = []
+	print("==method==", method)
+	if frappe.flags.in_import or frappe.flags.in_patch or frappe.flags.in_install:
+		return
 
-    if doc.flags.tel_notifications == None:
-        alerts = frappe.cache().hget("tel_notifications", doc.doctype)
-        if alerts == None:
-            alerts = frappe.get_all(
-                "TeleBot Notification",
-                fields=["name", "event", "method"],
-                filters={"enabled": 1, "document_type": doc.doctype},
-            )
-            frappe.cache().hset("tel_notifications", doc.doctype, alerts)
-        doc.flags.tel_notifications = alerts
+	if doc.flags.tel_notifications_executed == None:
+		doc.flags.tel_notifications_executed = []
 
-    if not doc.flags.tel_notifications:
-        return
+	if doc.flags.tel_notifications == None:
+		alerts = frappe.cache().hget("tel_notifications", doc.doctype)
+		if alerts == None:
+			alerts = frappe.get_all(
+				"TeleBot Notification",
+				fields=["name", "event", "method"],
+				filters={"enabled": 1, "document_type": doc.doctype},
+			)
+			frappe.cache().hset("tel_notifications", doc.doctype, alerts)
+		doc.flags.tel_notifications = alerts
 
-    def _evaluate_alert(alert):
-        if not alert.name in doc.flags.tel_notifications_executed:
-            if frappe.db.exists("TeleBot Notification", alert.name):
-                evaluate_alert(doc, alert.name, alert.event)
-                doc.flags.tel_notifications_executed.append(alert.name)
+	if not doc.flags.tel_notifications:
+		return
 
-    event_map = {
-        "on_update": "Save",
-        "after_insert": "New",
-        "on_submit": "Submit",
-        "on_cancel": "Cancel",
-    }
+	def _evaluate_alert(alert):
+		if not alert.name in doc.flags.tel_notifications_executed:
+			if frappe.db.exists("TeleBot Notification", alert.name):
+				evaluate_alert(doc, alert.name, alert.event)
+				doc.flags.tel_notifications_executed.append(alert.name)
 
-    if not doc.flags.in_insert:
-        # value change is not applicable in insert
-        event_map["validate"] = "Value Change"
-        event_map["before_change"] = "Value Change"
-        event_map["before_update_after_submit"] = "Value Change"
+	event_map = {
+		"on_update": "Save",
+		"after_insert": "New",
+		"on_submit": "Submit",
+		"on_cancel": "Cancel",
+	}
 
-    for alert in doc.flags.tel_notifications:
-        event = event_map.get(method, None)
-        if event and alert.event == event:
-            _evaluate_alert(alert)
-        elif alert.event == "Method" and method == alert.method:
-            _evaluate_alert(alert)
+	if not doc.flags.in_insert:
+		# value change is not applicable in insert
+		event_map["on_change"] = "Value Change"
+
+	for alert in doc.flags.tel_notifications:
+		event = event_map.get(method, None)
+		if event and alert.event == event:
+			_evaluate_alert(alert)
+		elif alert.event == "Method" and method == alert.method:
+			_evaluate_alert(alert)
 
 
 @frappe.whitelist()

@@ -110,26 +110,95 @@ app_license = "MIT"
 #	}
 # }
 
+doc_events = {
+
+     "*": {
+        #   "validate":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "onload":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "before_insert":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "after_insert":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "before_naming":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "before_change":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "before_update_after_submit":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "before_validate":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "before_save":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+        #   "autoname":[
+        #        # "telegram_integration.telegram_integration.doctype.telegram_notification.telegram_notification.run_telegram_notifications",
+        #        # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+        #        ],
+          "after_insert":[
+               "telebot_integration.telebot_integration.doctype.telebot_notification.telebot_notification.run_telegram_notifications",
+               # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+               ],
+          "on_update":[
+               "telebot_integration.telebot_integration.doctype.telebot_notification.telebot_notification.run_telegram_notifications",
+               # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+               ],
+          "on_cancel":[
+               "telebot_integration.telebot_integration.doctype.telebot_notification.telebot_notification.run_telegram_notifications",
+               # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+               ],
+          "on_submit":[
+               "telebot_integration.telebot_integration.doctype.telebot_notification.telebot_notification.run_telegram_notifications",
+               # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+               ],
+          "on_change":[
+               "telebot_integration.telebot_integration.doctype.telebot_notification.telebot_notification.run_telegram_notifications",
+               # "telegram_integration.telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications"
+               ],
+	},
+}
+
+
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-#	"all": [
-#		"telebot_integration.tasks.all"
-#	],
-#	"daily": [
-#		"telebot_integration.tasks.daily"
-#	],
-#	"hourly": [
-#		"telebot_integration.tasks.hourly"
-#	],
-#	"weekly": [
-#		"telebot_integration.tasks.weekly"
-#	],
-#	"monthly": [
-#		"telebot_integration.tasks.monthly"
-#	],
-# }
+scheduler_events = {
+# 	"all": [
+# 		"telegram_integration.tasks.all"
+# 	],
+	"daily": [
+        "telebot_integration.telebot_integration.doctype.telebot_notification.telebot_notification.trigger_daily_alerts",
+        "telebot_integration.telebot_integration.doctype.date_notification.date_notification.trigger_daily_alerts",
+    ],
+	# "hourly": [
+	# 	"telegram_integration.telegram_integration.doctype.date_notification.date_notification.trigger_daily_alerts",
+	# ],
+# 	"weekly": [
+# 		"telegram_integration.tasks.weekly"
+# 	]
+# 	"monthly": [
+# 		"telegram_integration.tasks.monthly"
+# 	]
+}
+
 
 # Testing
 # -------
