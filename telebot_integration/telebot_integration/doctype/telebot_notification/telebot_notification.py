@@ -318,7 +318,6 @@ class TeleBotNotification(Document):
 def run_telegram_notifications(doc, method):
 	"""Run notifications for this method"""
 
-	print("==method==", method)
 	if frappe.flags.in_import or frappe.flags.in_patch or frappe.flags.in_install:
 		return
 
