@@ -324,16 +324,20 @@ def run_telegram_notifications(doc, method):
 	if doc.flags.tel_notifications_executed == None:
 		doc.flags.tel_notifications_executed = []
 
-	if doc.flags.tel_notifications == None:
-		alerts = frappe.cache().hget("tel_notifications", doc.doctype)
-		if alerts == None:
-			alerts = frappe.get_all(
+	if doc.flags.tel_notifications is None:
+		def _get_notifications():
+
+		# alerts = frappe.cache().hget("tel_notifications", doc.doctype)
+		# if alerts == None:
+			return frappe.get_all(
 				"TeleBot Notification",
 				fields=["name", "event", "method"],
 				filters={"enabled": 1, "document_type": doc.doctype},
 			)
-			frappe.cache().hset("tel_notifications", doc.doctype, alerts)
-		doc.flags.tel_notifications = alerts
+			
+		doc.flags.tel_notifications = frappe.cache().hget(
+			"tel_notifications", doc.doctype, _get_notifications
+		)
 
 	if not doc.flags.tel_notifications:
 		return
@@ -393,62 +397,64 @@ def trigger_notifications(doc, method=None):
                 frappe.db.commit()
 
 
-def evaluate_alert(doc, alert, event):
-    from jinja2 import TemplateError
+def evaluate_alert(doc: Document, alert, event):
+	# print("=-=alert=-=", alert)
+	# print("=-=event=-=", event)
+	from jinja2 import TemplateError
 
-    try:
-        if isinstance(alert, string_types):
-            alert = frappe.get_doc("TeleBot Notification", alert)
+	try:
+		if isinstance(alert, str):
+			alert = frappe.get_doc("TeleBot Notification", alert)
 
-        context = get_context(doc)
+		context = get_context(doc)
 
-        if alert.condition:
-            if not frappe.safe_eval(alert.condition, None, context):
-                return
+		if alert.condition:
+			if not frappe.safe_eval(alert.condition, None, context):
+				return
 
-        if event == "Value Change" and not doc.is_new():
-            try:
-                db_value = frappe.db.get_value(
-                    doc.doctype, doc.name, alert.value_changed
-                )
-            except Exception as e:
-                if frappe.db.is_missing_column(e):
-                    alert.db_set("enabled", 0)
-                    frappe.log_error(
-                        "Notification {0} has been disabled due to missing field".format(
-                            alert.name
-                        )
-                    )
-                    return
-                else:
-                    raise
-            db_value = parse_val(db_value)
-            if (doc.get(alert.value_changed) == db_value) or (
-                not db_value and not doc.get(alert.value_changed)
-            ):
-                return  # value not changed
+		if event == "Value Change" and not doc.is_new():
+			try:
+				db_value = frappe.db.get_value(
+					doc.doctype, doc.name, alert.value_changed
+				)
+			except Exception as e:
+				if frappe.db.is_missing_column(e):
+					alert.db_set("enabled", 0)
+					frappe.log_error(
+						"Notification {0} has been disabled due to missing field".format(
+							alert.name
+						)
+					)
+					return
+				else:
+					raise
+			db_value = parse_val(db_value)
+			if (doc.get(alert.value_changed) == db_value) or (
+				not db_value and not doc.get(alert.value_changed)
+			):
+				return  # value not changed
 
-        if event != "Value Change" and not doc.is_new():
-            # reload the doc for the latest values & comments,
-            # except for validate type event.
-            doc = frappe.get_doc(doc.doctype, doc.name)
-        alert.send(doc)
-    except TemplateError:
-        frappe.throw(
-            _(
-                "Error while evaluating Notification {0}. Please fix your template."
-            ).format(alert)
-        )
-    except Exception as e:
-        error_log = frappe.log_error(
-            message=frappe.get_traceback(), title=str(e))
-        frappe.throw(
-            _(
-                "Error in Notification: {}".format(
-                    frappe.utils.get_link_to_form("Error Log", error_log.name)
-                )
-            )
-        )
+		if event != "Value Change" and not doc.is_new():
+			# reload the doc for the latest values & comments,
+			# except for validate type event.
+			doc = frappe.get_doc(doc.doctype, doc.name)
+		alert.send(doc)
+	except TemplateError:
+		frappe.throw(
+			_(
+				"Error while evaluating Notification {0}. Please fix your template."
+			).format(alert)
+		)
+	except Exception as e:
+		error_log = frappe.log_error(
+			message=frappe.get_traceback(), title=str(e))
+		frappe.throw(
+			_(
+				"Error in Notification: {}".format(
+					frappe.utils.get_link_to_form("Error Log", error_log.name)
+				)
+			)
+		)
 
 
 def get_context(doc):

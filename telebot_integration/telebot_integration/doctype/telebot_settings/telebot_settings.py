@@ -29,7 +29,7 @@ def send_to_telegram(telegram_user, message, reference_doctype=None, reference_n
 		doc_url = get_url_to_form(reference_doctype, reference_name)
 		telegram_doc_link = _("See the document at {0}").format(doc_url)
 		if message:
-			soup = BeautifulSoup(message)
+			soup = BeautifulSoup(message, features="lxml")
 			message = soup.get_text('\n') + space + str(telegram_doc_link)
 			if type(attachment) is str:
 				attachment = int(attachment)
