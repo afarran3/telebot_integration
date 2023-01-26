@@ -94,13 +94,14 @@ def create_telegram_chat(bot_name = None):
 
 
 def assign_values_based_on_type(tele_chat, chat):
+	user_name = None
 	if chat["type"] == 'private':
-		tele_chat.telegram_user_name = str(chat["first_name"] + " " + chat["last_name"])
-	elif chat["type"] == 'supergroup' or 'channel':
-		tele_chat.telegram_user_name = str(chat["title"])
-	elif chat["type"] == 'group':
-		tele_chat.telegram_user_name = str(chat["title"])
-	tele_chat.save()
+		user_name = str(chat["first_name"] + " " + chat["last_name"])
+	elif chat["type"] in ['supergroup', 'channel', 'group']:
+		user_name = str(chat["title"])
+	if (user_name and tele_chat.telegram_user_name != user_name) or tele_chat.is_new():
+		tele_chat.telegram_user_name = user_name
+		tele_chat.save()
 
 
 def get_updates(bot_doc_list):
