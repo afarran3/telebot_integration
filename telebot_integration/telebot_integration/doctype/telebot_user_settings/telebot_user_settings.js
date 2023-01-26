@@ -11,6 +11,34 @@ frappe.ui.form.on('TeleBot User Settings', {
 		});
 	},
 
+	
+	party: function(frm){
+		console.log("frm.doc.party = ", frm.doc.party);
+		frm.set_value("telegram_user", undefined);
+		frm.trigger("telegram_user");
+	},	
+
+
+	telegram_user: function(frm){
+		let party_name = undefined;
+		if(frm.doc.telegram_user){
+			if(frm.doc.party){
+				if(frm.doc.party == "User"){
+					frappe.db.get_value(frm.doc.party, frm.doc.telegram_user, "full_name", (values) => {
+						frm.set_value("telegram_user_name", values.full_name);
+					});
+				}
+				else{
+					frappe.db.get_value(frm.doc.party, frm.doc.telegram_user, "name", (values) => {
+						frm.set_value("telegram_user_name", values.name);
+					});
+				}
+			}
+		}else{
+			frm.set_value("telegram_user_name", undefined);
+		}
+	},
+
 
 	generate_telegram_token: function(frm) {
 		frappe.call({
