@@ -25,10 +25,20 @@ def send_to_telegram(telegram_user, message, reference_doctype=None, reference_n
 	telegram_token = frappe.db.get_value('TeleBot Settings', telegram_settings,'telegram_token')
 	bot = telegram.Bot(token=telegram_token)
 
-
 	if reference_doctype and reference_name:
 		doc_url = get_url_to_form(reference_doctype, reference_name)
 		telegram_doc_link = _("See the document at {0}").format(doc_url)
+
+		# keyboard = [
+		# 	[
+		# 		telegram.InlineKeyboardButton("Approve", callback_data="Approve"),
+		# 		telegram.InlineKeyboardButton("Reject", callback_data="Reject"),
+		# 	],
+		# 	[telegram.InlineKeyboardButton("Hide", callback_data="Hide")],
+		# ]
+
+		# reply_markup = telegram.InlineKeyboardMarkup(keyboard)
+
 		if message:
 			soup = BeautifulSoup(message, features="lxml")
 			message = soup.get_text('\n') + space + str(telegram_doc_link)
@@ -40,7 +50,7 @@ def send_to_telegram(telegram_user, message, reference_doctype=None, reference_n
 			if attachment == 1:
 				attachment_url = get_url_for_telegram(reference_doctype, reference_name)
 				message = message + space +  attachment_url
-			asyncio.run(bot.send_message(chat_id=telegram_chat_id, text=message))
+			asyncio.run(bot.send_message(chat_id=telegram_chat_id, text=message))#, reply_markup=reply_markup))
 		
 	else:
 		message = space + str(message) + space
@@ -75,9 +85,9 @@ def create_telegram_chat(bot_name = None):
 	if updates:
 		if bot_name:
 			if bot_name in updates:
-				frappe.msgprint(_("Telegram User Created"))
+				frappe.msgprint(_("A New 'Telegram User' has been created successfully."))
 			else:
-				frappe.msgprint(_('No Chats in {0}.').format(bot_name))
+				frappe.msgprint(_('No Chats Found in {0}.').format(bot_name))
 
 		for k, v in updates.items():
 			for chat in v['chats']:
@@ -91,6 +101,9 @@ def create_telegram_chat(bot_name = None):
 					doc = frappe.get_doc('TeleBot User Settings',{'telegram_chat_id':chat["id"],'telegram_settings':k})
 
 				assign_values_based_on_type(doc, chat)
+	else:
+		if bot_name:
+			frappe.msgprint(_('No Updates Found in {0}.').format(bot_name))
 
 
 def assign_values_based_on_type(tele_chat, chat):
