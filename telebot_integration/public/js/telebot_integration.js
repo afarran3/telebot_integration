@@ -14,7 +14,7 @@ $('body').on('DOMSubtreeModified', function(){
                     var dialog = new frappe.ui.Dialog({
                         'fields': [
                             {'fieldname': 'ht', 'fieldtype': 'HTML'},
-                            {'label':'Send To','fieldname': 'telegram_user', 'reqd': 1, 'fieldtype': 'Link','options': 'Telegram User Settings'},
+                            {'label':'Send To','fieldname': 'telegram_user', 'reqd': 1, 'fieldtype': 'Link','options': 'TeleBot User Settings'},
                             {'label':'Subject','fieldname': 'subject', 'reqd': 1, 'fieldtype': 'Data','default': frm.doc.name},
                             {'label':'Message','fieldname': 'message', 'reqd': 1, 'fieldtype': 'SmallText'},
                             {'label':'Attach Document Print','fieldname': 'attach_document_print', 'fieldtype': 'Check'},
